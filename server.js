@@ -85,25 +85,33 @@ app.get("/group/:code", (req, res, next) => {
   parseAndSendMultiRequest(res, urls, names, parentCodes);
 });
 
-const parseAndSendMultiRequest = (res, urls, names, parentCodes, groups) => {
+const parseAndSendMultiRequest = async (res, urls, names, parentCodes, groups) => {
   const arrPromise = [];
+  const value = [];
   for (const url of urls) {
-    arrPromise.push(parse(url));
+    try {
+      const parsed = await parse(url);
+      value.push(parsed);
+      // arrPromise.push(parse(url));
+    } catch (error) {
+      console.error(error);
+    }
   }
-  Promise.all(arrPromise).then((values) => {
-    values.forEach((val, i) => {
-      val['name'] = names[i];
-      val['code'] = parentCodes[i];
-      if (groups) {
-        val.items.forEach(item => {
-          item['group'] = groups[i];
-        });
-      }
-    });
-    res.status(200).json({ message: "Fetch successfully", data: values });
-  }, error => {
-    res.status(500).json({ message: "Server error", data: error });
-  });
+  res.status(200).json({ message: "Fetch successfully", data: value });
+  // Promise.all(arrPromise).then((values) => {
+  //   values.forEach((val, i) => {
+  //     val['name'] = names[i];
+  //     val['code'] = parentCodes[i];
+  //     if (groups) {
+  //       val.items.forEach(item => {
+  //         item['group'] = groups[i];
+  //       });
+  //     }
+  //   });
+  //   res.status(200).json({ message: "Fetch successfully", data: values });
+  // }, error => {
+  //   res.status(500).json({ message: "Server error", data: error });
+  // });
 }
 
 const normalizePort = val => {
