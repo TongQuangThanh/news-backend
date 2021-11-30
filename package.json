@@ -11,6 +11,8 @@
   "author": "thnvn",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "express": "^4.17.1",
     "rss-to-json": "^2.0.2"
   },
